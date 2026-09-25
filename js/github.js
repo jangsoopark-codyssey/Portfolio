@@ -77,7 +77,7 @@ function createProjectCard(project) {
     const metadata = document.createElement("div");
     metadata.classList.add("project-card__metadata");
 
-    metadata.textContent = `${language || "N/A"} · * ${stargazers_count} · Forks ${forks_count}`;
+    metadata.textContent = `${language || "N/A"} · Stars ${stargazers_count} · Forks ${forks_count}`;
 
     const link = document.createElement("a");
     link.classList.add("project-card__link");

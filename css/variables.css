@@ -1,0 +1,39 @@
+:root {
+    /* Fonts */
+    --font-logo: "Snell Roundhand", "Brush Script MT", cursive;
+    --font-display: "Courier New", Courier, monospace;
+    --font-body: Arial, Helvetica, sans-serif;
+
+    /* Font sizes */
+    --font-size-logo: 20px;
+    --font-size-nav: 13px;
+
+    --font-size-hero-main: 22px;
+    --font-size-hero-sub: 15px;
+    --font-size-cta: 15px;
+
+    --font-size-section-title: 18px;
+    --font-size-body: 15px;
+    --font-size-footer: 12px;
+
+    /* Colors - default theme */
+    --color-backtround: #ffffff;
+    --color-surface: #f7f7f7;
+
+    --color-text: #111111;
+    --color-muted: #666666;
+
+    --color-border: #d0d0d0;
+
+    /* Layout */
+    --header-height: 56px;
+
+    --page-padding: 20px;
+    --section-spacing: 72px;
+
+    --content-max-width: 1200px;
+
+    /* Components */
+    --button-height: 44px;
+    --top-button-size: 44px;
+}

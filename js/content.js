@@ -101,3 +101,27 @@ export function renderHero(hero) {
         ctaContainer.appendChild(link);
     }
 }
+
+export function renderAbout(about) {
+    const heading = document.querySelector("#about-heading");
+    const profileImage = document.querySelector("#about-profile-image");
+    const intro = document.querySelector("#about-intro");
+    const body = document.querySelector("#about-body");
+
+    heading.textContent = about.heading;
+
+    profileImage.src = about.profileImage;
+    profileImage.alt = about.profileAlt;
+
+    intro.textContent = about.intro;
+
+    body.replaceChildren();
+
+    about.body.forEach((paragraph) => {
+        const p = document.createElement("p");
+
+        p.textContent = paragraph;
+
+        body.appendChild(p);
+    });
+}

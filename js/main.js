@@ -2,7 +2,8 @@ import {
     loadContent,
     renderSite,
     renderHero,
-    renderAbout
+    renderAbout,
+    renderSkills
 } from "./content.js";
 
 function initNavigation() {
@@ -49,6 +50,7 @@ async function main() {
         renderSite(content.site);
         renderHero(content.hero);
         renderAbout(content.about);
+        renderSkills(content.skills);
 
         initNavigation();
     } catch (error) {

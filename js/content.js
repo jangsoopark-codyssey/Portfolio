@@ -125,3 +125,54 @@ export function renderAbout(about) {
         body.appendChild(p);
     });
 }
+
+export function renderSkills(skills) {
+    const heading = document.querySelector("#skills-heading");
+    const list = document.querySelector("#skills-list");
+
+    heading.textContent = skills.heading;
+
+    list.replaceChildren();
+
+    skills.items.forEach((skill) => {
+        const article = document.createElement("article");
+        article.classList.add("skill-card");
+
+        const title = document.createElement("h3");
+        title.classList.add("skill-card__title");
+        title.textContent = skill.category;
+
+        const description = document.createElement("p");
+        description.classList.add("skill-card__description");
+        description.textContent = skill.description;
+
+        const stack = document.createElement("ul");
+        stack.classList.add("skill-card__stack");
+
+        skill.stack.forEach((item) => {
+            const li = document.createElement("li");
+            li.textContent = item;
+
+            const className = item
+                .toLowerCase()
+                .replace(/\+/g, "plus")
+                .replace(/[^a-z0-9]+/g, "-")
+                .replace(/^-|-$/g, "");
+
+            li.classList.add(
+                "skill-card__tag",
+                `skill-card__tag--${className}`
+            );
+
+            stack.appendChild(li);
+        });
+        
+        article.append(
+            title,
+            description,
+            stack
+        );
+
+        list.appendChild(article);
+    });
+}

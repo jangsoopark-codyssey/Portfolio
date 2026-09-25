@@ -24,6 +24,21 @@ function initNavigation() {
             menuButton.setAttribute("aria-expanded", "false");
         });
     });
+
+    document.addEventListener("click", (event) => {
+        const isOpen = navigation.classList.contains("active");
+
+        if (!isOpen)
+            return;
+
+        const clickedMenuButton = menuButton.contains(event.target);
+        const clickedNavigation = navigation.contains(event.target);
+
+        if (!clickedMenuButton && !clickedNavigation) {
+            navigation.classList.remove("active");
+            menuButton.setAttribute("aria-expanded", "false");
+        }
+    });
 }
 
 async function main() {

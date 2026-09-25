@@ -409,3 +409,54 @@ img {
 
     text-decoration: underline;
 }
+
+.projects-status {
+    margin-bottom: 16px;
+}
+
+.projects-status__message {
+    margin: 0;
+
+    font-size: 14px;
+    line-height: 1.5;
+
+    color: var(--color-muted);
+}
+
+.projects-status--loading,
+.projects-status--empty {
+    padding: 16px;
+
+    text-align: center;
+
+    border: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+}
+
+.projects-status--error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 16px;
+
+    text-align: center;
+
+    border: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+}
+
+.projects-status__retry {
+    min-height: 40px;
+
+    padding: 0 16px;
+
+    color: #ffffff;
+    background-color: var(--color-text);
+
+    border: 1px solid var(--color-text);
+
+    cursor: pointer;
+}

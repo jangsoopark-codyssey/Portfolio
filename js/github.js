@@ -32,18 +32,31 @@ export async function loadProjects(username) {
 
 function renderLoading(status, list) {
     list.replaceChildren();
+    status.replaceChildren();
 
-    status.textContent = "Loading projects...";
+    const message = document.createElement("p");
+    message.classList.add("projects-status__message");
+    message.textContent = "Loading projects...";
+
+    status.className = "projects-status projects-status--loading";
+    status.appendChild(message);
 }
 
 function renderEmpty(status, list) {
     list.replaceChildren();
+    status.replaceChildren();
 
-    status.textContent = "No projects to display.";
+    const message = document.createElement("p");
+    message.classList.add("projects-status__message");
+    message.textContent = "No projects to display.";
+
+    status.className = "projects-status projects-status--empty";
+    status.appendChild(message);
 }
 
 function renderSuccess(status, list, projects) {
-    status.textContent = "";
+    status.replaceChildren();
+    status.className = "projects-status";
 
     const cards = projects.map((project) => {
         return createProjectCard(project);
@@ -103,15 +116,19 @@ function renderError(status, list, username) {
     status.replaceChildren();
 
     const message = document.createElement("p");
+    message.classList.add("projects-status__message");
     message.textContent = "Failed to load projects.";
 
     const retryButton = document.createElement("button");
+    retryButton.classList.add("projects-status__retry");
     retryButton.type = "button";
     retryButton.textContent = "Retry";
 
     retryButton.addEventListener("click", () => {
         loadProjects(username);
     });
+
+    status.className = "projects-status projects-status--error";
 
     status.append(
         message,

@@ -12,6 +12,10 @@ import {
     loadProjects
 } from "./github.js"
 
+import {
+    initContactForm
+} from "./contact.js"
+
 function initNavigation() {
     const menuButton = document.querySelector("#menu-button")
     const navigation = document.querySelector("#navigation")
@@ -61,6 +65,7 @@ async function main() {
         renderContact(content.contact);
 
         initNavigation();
+        initContactForm()
 
         await loadProjects(
             content.projects.username

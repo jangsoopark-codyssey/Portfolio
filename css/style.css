@@ -538,3 +538,17 @@ img {
 
     cursor: pointer;
 }
+
+.form-field__error {
+    margin: 4px 0 0;
+
+    font-size: 13px;
+    color: #b42318;
+}
+
+.contact-form__success {
+    margin: 0;
+
+    font-size: 14px;
+    text-align: center;
+}

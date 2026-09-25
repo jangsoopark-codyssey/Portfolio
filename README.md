@@ -34,6 +34,22 @@ Portfolio/
 | `js/contact.js`             | Contact Form 처리 | Submit 이벤트, 이름/이메일/메시지 유효성 검사, 에러 및 성공 상태 DOM 업데이트                                                  |
 | `data/content.json`         | 콘텐츠 데이터 저장      | Site metadata, Navigation, Hero, About, Skills, Projects 설정, Contact, Footer 등 변경 가능한 콘텐츠 관리        |
 
+
+```plaintext
+main.js
+  │
+  ├─ content.js
+  │    ├─ content.json load
+  │    ├─ version validation
+  │    └─ static content rendering
+  │
+  ├─ github.js
+  │    └─ GitHub API → Projects rendering
+  │
+  └─ contact.js
+       └─ Contact form validation
+```
+
 ## Table of Contents
 
 ## Question

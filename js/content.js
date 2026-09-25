@@ -176,3 +176,9 @@ export function renderSkills(skills) {
         list.appendChild(article);
     });
 }
+
+export function renderProjects(projects) {
+    const heading = document.querySelector("#projects-heading");
+
+    heading.textContent = projects.heading;
+}

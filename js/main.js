@@ -3,8 +3,13 @@ import {
     renderSite,
     renderHero,
     renderAbout,
-    renderSkills
+    renderSkills,
+    renderProjects
 } from "./content.js";
+
+import {
+    loadProjects
+} from "./github.js"
 
 function initNavigation() {
     const menuButton = document.querySelector("#menu-button")
@@ -51,8 +56,13 @@ async function main() {
         renderHero(content.hero);
         renderAbout(content.about);
         renderSkills(content.skills);
+        renderProjects(content.projects);
 
         initNavigation();
+
+        await loadProjects(
+            content.projects.username
+        );
     } catch (error) {
         console.error("Failed to initialize: ", error);
     }

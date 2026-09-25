@@ -5,7 +5,8 @@ import {
     renderAbout,
     renderSkills,
     renderProjects,
-    renderContact
+    renderContact,
+    renderFooter
 } from "./content.js";
 
 import {
@@ -53,6 +54,25 @@ function initNavigation() {
     });
 }
 
+function initTopButton() {
+    const topButton = document.querySelector("#top-button");
+
+    window.addEventListener("scroll", () => {
+        if (window.scrollY >= 300) {
+            topButton.hidden = false;
+        } else {
+            topButton.hidden = true;
+        }
+    });
+
+    topButton.addEventListener("click", () => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    });
+}
+
 async function main() {
     try {
         const content = await loadContent();
@@ -63,9 +83,11 @@ async function main() {
         renderSkills(content.skills);
         renderProjects(content.projects);
         renderContact(content.contact);
+        renderFooter(content.footer);
 
         initNavigation();
-        initContactForm()
+        initContactForm();
+        initTopButton();
 
         await loadProjects(
             content.projects.username

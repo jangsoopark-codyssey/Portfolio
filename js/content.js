@@ -221,3 +221,26 @@ export function renderContact(contact) {
         fields.appendChild(fieldContainer);
     });
 }
+
+export function renderFooter(footer) {
+    const links = document.querySelector("#footer-links");
+    const copyright = document.querySelector("#footer-copyright");
+
+    links.replaceChildren();
+
+    footer.links.forEach((item) => {
+        const link = document.createElement("a");
+
+        link.textContent = item.label;
+        link.href = item.url;
+
+        if (item.url.startsWith('http')) {
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+        }
+
+        links.appendChild(link)
+    });
+
+    copyright.textContent = footer.copyright;
+}

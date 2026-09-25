@@ -1,0 +1,155 @@
+{
+  "version": "1.0.0",
+
+  "site": {
+    "title": "Jangsoo Park | Portfolio",
+    "description": "Portfolio of Jangsoo Park, a software engineer specializing in video and image processing.",
+    "author": "Jangsoo Park",
+    "keywords": [
+      "Jangsoo Park",
+      "Portfolio",
+      "Software Engineer",
+      "Video Processing",
+      "Image Processing"
+    ],
+    "language": "en",
+    "logo": "Jangsoo Park",
+    "navigation": [
+      {
+        "label": "Hero",
+        "target": "hero"
+      },
+      {
+        "label": "About",
+        "target": "about"
+      },
+      {
+        "label": "Skills",
+        "target": "skills"
+      },
+      {
+        "label": "Projects",
+        "target": "projects"
+      },
+      {
+        "label": "Contact",
+        "target": "contact"
+      }
+    ],
+    "topButton": {
+        "ariaLabel": "Back to top",
+        "display": {
+            "type": "text",
+            "value": "TOP"
+        }
+    }
+  },
+
+  "hero": {
+    "mainText": "Software Engineer Specializing in Video & Image Processing",
+    "subText": "Building efficient, practical, and hardware-aware solutions for real-world visual computing.",
+    "cta": [
+      {
+        "label": "See My Work",
+        "target": "projects"
+      },
+      {
+        "label": "Get in Touch",
+        "target": "contact"
+      }
+    ]
+  },
+
+  "about": {
+    "heading": "ABOUT",
+    "intro": "Hello! I'm Jangsoo Park.",
+    "profileImage": "./assets/images/profile.jpg",
+    "profileAlt": "Portrait of Jangsoo Park",
+    "body": [
+      "I work across video, image processing, and visual computing, with experience spanning both research-oriented exploration and practical software development.",
+      "I enjoy turning technical ideas into working systems — understanding how things work, testing different approaches, and refining them with efficiency and real-world constraints in mind.",
+      "My interests have gradually expanded from traditional image and video processing to computer vision, compression, and AI-based visual systems.",
+      "I value engineering that is not only accurate, but also efficient, understandable, and practical to use."
+    ]
+  },
+
+  "skills": {
+    "heading": "SKILLS",
+    "items": [
+      {
+        "category": "Visual Computing",
+        "description": "Process, analyze, and model image/video data",
+        "stack": [
+          "OpenCV",
+          "FFmpeg",
+          "PyTorch"
+        ]
+      },
+      {
+        "category": "Deep Learning",
+        "description": "Design, train, evaluate, and adapt neural networks",
+        "stack": [
+          "PyTorch",
+          "torchvision",
+          "diffusers"
+        ]
+      },
+      {
+        "category": "High Performance Computing",
+        "description": "Optimize computation, memory usage, and execution efficiency",
+        "stack": [
+          "CUDA",
+          "Parallel Computing",
+          "Profiling",
+          "GPU Acceleration"
+        ]
+      },
+      {
+        "category": "Software Engineering",
+        "description": "Build reproducible and maintainable development environments",
+        "stack": [
+          "Python",
+          "C/C++",
+          "Docker",
+          "Git",
+          "Linux"
+        ]
+      }
+    ]
+  },
+
+  "projects": {
+    "heading": "PROJECTS"
+  },
+
+  "contact": {
+    "heading": "CONTACT",
+    "intro": "Have a project, question, or idea you'd like to discuss?",
+    "fields": {
+      "name": {
+        "label": "Name"
+      },
+      "email": {
+        "label": "Email"
+      },
+      "message": {
+        "label": "Message"
+      }
+    },
+    "button": "Send Message"
+  },
+
+  "footer": {
+    "copyright": "© 2026 Jangsoo Park. All rights reserved.",
+    "links": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/jangsoopark"
+      },
+      {
+        "label": "LinkedIn",
+        "url": ""
+      }
+    ]
+  }
+}

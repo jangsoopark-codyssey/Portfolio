@@ -1,0 +1,103 @@
+const SUPPORTED_VERSION = 1;
+
+export async function loadContent() {
+    const response = await fetch("./data/content.json");
+
+    if (!response.ok) {
+        throw new Error(
+            `Failed to load content: ${response.status} ${response.statusText}`
+        );
+    }
+
+    const content = await response.json();
+
+    validateVersion(content.version);
+
+    return content;
+}
+
+function validateVersion(version) {
+    if (!version) {
+        throw new Error("content.json version is missing.");
+    }
+
+    const major = Number(version.split(".")[0]);
+
+    if (Number.isNaN(major)) {
+        throw new Error(
+            `Invalid content version: ${version}`
+        );
+    }
+
+    if (major !== SUPPORTED_VERSION) {
+        throw new Error(
+            `Unsupported content version: ${version}`
+        );
+    }
+}
+
+export function renderSite(site) {
+    document.title = site.title;
+    document.documentElement.lang = site.language;
+
+    const description = document.querySelector(
+        'meta[name="description"]'
+    );
+
+    if (description) {
+        description.setAttribute("content", site.description);
+    }
+
+    const logo = document.getElementById("logo");
+    logo.textContent = site.logo;
+
+    renderNavigation(site.navigation);
+    renderTopButton(site.topButton);
+}
+
+function renderNavigation(navigation) {
+    const list = document.getElementById("navigation-list");
+
+    list.replaceChildren();
+
+    for (const item of navigation) {
+        const li = document.createElement('li');
+
+        const link = document.createElement('a');
+        link.textContent = item.label;
+        link.href = `#${item.target}`;
+
+        li.appendChild(link);
+        list.appendChild(li);
+    }
+}
+
+function renderTopButton(topButton) {
+    const button = document.getElementById("top-button");
+
+    button.setAttribute("aria-label", topButton.ariaLabel);
+
+    if (topButton.display.type === "text") {
+        button.textContent = topButton.display.value;
+    }
+}
+
+export function renderHero(hero) {
+    const mainText = document.getElementById("hero-main-text");
+    const subText = document.getElementById("hero-sub-text");
+    const ctaContainer = document.getElementById("hero-cta");
+
+    mainText.textContent = hero.mainText;
+    subText.textContent = hero.subText;
+
+    ctaContainer.replaceChildren();
+
+    for (const item of hero.cta) {
+        const link = document.createElement('a');
+
+        link.textContent = item.label;
+        link.href = `#${item.target}`;
+
+        ctaContainer.appendChild(link);
+    }
+}

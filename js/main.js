@@ -4,7 +4,8 @@ import {
     renderHero,
     renderAbout,
     renderSkills,
-    renderProjects
+    renderProjects,
+    renderContact
 } from "./content.js";
 
 import {
@@ -57,6 +58,7 @@ async function main() {
         renderAbout(content.about);
         renderSkills(content.skills);
         renderProjects(content.projects);
+        renderContact(content.contact);
 
         initNavigation();
 

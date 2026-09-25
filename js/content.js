@@ -182,3 +182,42 @@ export function renderProjects(projects) {
 
     heading.textContent = projects.heading;
 }
+
+export function renderContact(contact) {
+    const heading = document.querySelector("#contact-heading");
+    const intro = document.querySelector("#contact-intro");
+    const fields = document.querySelector("#contact-fields");
+    const submitButton = document.querySelector("#contact-submit");
+
+    heading.textContent = contact.heading;
+    intro.textContent = contact.intro;
+    submitButton.textContent = contact.button;
+
+    fields.replaceChildren();
+
+    Object.entries(contact.fields).forEach(([name, field]) => {
+        const fieldContainer = document.createElement("div");
+        fieldContainer.classList.add("form-field");
+
+        const label = document.createElement("label");
+        label.htmlFor = `contact-${name}`;
+        label.textContent = field.label;
+
+        let input;
+
+        if (name === "message") {
+            input = document.createElement("input");
+            input.rows = 6;
+        } else {
+            input = document.createElement("input");
+            input.type = name === "email" ? "email" : "text";
+        }
+
+        input.id = `contact-${name}`;
+        input.name = name;
+        input.required = true;
+
+        fieldContainer.append(label, input);
+        fields.appendChild(fieldContainer);
+    });
+}

@@ -251,6 +251,31 @@ img {
     line-height: 1.2;
 }
 
+#hero-main-text::after {
+    content: ":";
+
+    margin-left: 2px;
+
+    animation: typing-cursor 0.8s infinite;
+}
+
+#hero-main-text.typing-complete::after {
+    animation: none;
+
+    opacity: 0;
+}
+
+@keyframes typing-cursor {
+    0%,
+    50% {
+        opacity: 1;
+    }
+    51%,
+    100% {
+        opacity: 0;
+    }
+}
+
 #hero-sub-text {
     max-width: 320px;
 

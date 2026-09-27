@@ -17,6 +17,37 @@ import {
     initContactForm
 } from "./contact.js"
 
+function initHeroTyping() {
+    const heroText = document.querySelector("#hero-main-text");
+
+    const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    if (prefersReducedMotion) {
+        return;
+    }
+
+    const fullText = heroText.textContent.trim();
+    if (!fullText) {
+        return;
+    }
+
+    heroText.textContent = "";
+
+    let index = 0;
+    const typingInterval = setInterval(() => {
+        heroText.textContent += fullText[index];
+
+        index += 1;
+
+        if (index >= fullText.length) {
+            clearInterval(typingInterval);
+
+            heroText.classList.add("typing-complete");
+        }
+    }, 45);
+}
 
 function initNavigation() {
     const menuButton = document.querySelector("#menu-button")
@@ -197,6 +228,7 @@ async function main() {
         renderContact(content.contact);
         renderFooter(content.footer);
 
+        initHeroTyping();
         initNavigation();
         initContactForm(content.contact.endpoint);
         initTopButton();

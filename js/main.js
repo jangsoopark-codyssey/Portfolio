@@ -125,6 +125,41 @@ function applyTheme(theme) {
     );
 }
 
+function initScrollAnimation() {
+    const targets = document.querySelectorAll(
+        "#about, #skills, #projects, #contact"
+    );
+
+    if (!("IntersectionObserver" in window)) {
+        return;
+    }
+
+    targets.forEach((target) => {
+        target.classList.add("reveal");
+    });
+
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) {
+                    return;
+                }
+
+                entry.target.classList.add("visible");
+
+                observer.unobserve(entry.target);
+            });
+        },
+        {
+            threshold: 0.2
+        }
+    );
+
+    targets.forEach((target) => {
+        observer.observe(target);
+    });
+}
+
 async function main() {
     try {
         const content = await loadContent();
@@ -142,6 +177,7 @@ async function main() {
         initTopButton();
         initHeaderScroll();
         initTheme();
+        initScrollAnimation();
 
         await loadProjects(
             content.projects.username

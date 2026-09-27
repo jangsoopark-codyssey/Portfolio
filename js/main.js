@@ -73,6 +73,16 @@ function initTopButton() {
     });
 }
 
+function initHeaderScroll() {
+    const header = document.querySelector("#header");
+
+    window.addEventListener("scroll", () => {
+        const isScrolled = window.scrollY >= 60;
+
+        header.classList.toggle("scrolled", isScrolled);
+    });
+}
+
 async function main() {
     try {
         const content = await loadContent();
@@ -88,6 +98,8 @@ async function main() {
         initNavigation();
         initContactForm(content.contact.endpoint);
         initTopButton();
+
+        initHeaderScroll();
 
         await loadProjects(
             content.projects.username

@@ -55,6 +55,19 @@ img {
     border-bottom: 1px solid var(--color-border);
 
     background-color: var(--color-surface);
+
+    transition:
+        background-color 0.2s ease,
+        box-shadow 0.2s ease;
+
+    z-index: 300;
+}
+
+#heaser.scrolled {
+    background-color: var(--color-background);
+
+    box-shadow: 
+        0 2px 8px rgb(0 0 0 / 0.08);
 }
 
 #logo {

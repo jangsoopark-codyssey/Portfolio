@@ -126,6 +126,7 @@
   "contact": {
     "heading": "CONTACT",
     "intro": "Have a project, question, or idea you'd like to discuss?",
+    "endpoint": "https://formspree.io/f/mqpayoky",
     "fields": {
       "name": {
         "label": "Name"
@@ -145,11 +146,15 @@
     "links": [
       {
         "label": "GitHub",
-        "url": "https://github.com/jangsoopark"
+        "url": "https://github.com/jangsoopark-codyssey"
       },
       {
         "label": "LinkedIn",
-        "url": ""
+        "url": "https://www.linkedin.com/in/jangsoo-park-382b52119/"
+      },
+      {
+        "label": "jangsoopark",
+        "url": "https://jangsoopark.github.io/"
       }
     ]
   }

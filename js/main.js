@@ -86,7 +86,7 @@ async function main() {
         renderFooter(content.footer);
 
         initNavigation();
-        initContactForm();
+        initContactForm(content.contact.endpoint);
         initTopButton();
 
         await loadProjects(

@@ -539,6 +539,11 @@ img {
     cursor: pointer;
 }
 
+#contact-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 .form-field__error {
     margin: 4px 0 0;
 
@@ -551,6 +556,17 @@ img {
 
     font-size: 14px;
     text-align: center;
+
+    color: #2f6b2f;
+}
+
+.contact-form__error {
+    margin: 0;
+
+    font-size: 14px;
+    text-align: center;
+
+    color: #b42318;
 }
 
 #footer {

@@ -56,3 +56,4 @@ main.js
 
 - Differnece between `==` and `===` in javascript
 - What is replaceChildren(·) ?
+- asynk? await ?

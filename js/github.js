@@ -1,9 +1,10 @@
 
 export async function loadProjects(username) {
+    const filters = document.querySelector("#project-filters");
     const status = document.querySelector("#projects-status");
     const list = document.querySelector("#projects-list");
 
-    renderLoading(status, list);
+    renderLoading(filters, status, list);
 
     try {
         const response = await fetch(
@@ -21,32 +22,37 @@ export async function loadProjects(username) {
             return;
         }
 
-        renderSuccess(status, list, projects);
+        renderSuccess(filters, status, list, projects);
 
     } catch(error) {
         console.error(error);
 
-        renderError(status, list, username);
+        renderError(filters, status, list, username);
     }
 }
 
-function renderLoading(status, list) {
+function renderLoading(filters, status, list) {
+    filters.replaceChildren();
     list.replaceChildren();
     status.replaceChildren();
 
     const message = document.createElement("p");
+
     message.classList.add("projects-status__message");
     message.textContent = "Loading projects...";
 
     status.className = "projects-status projects-status--loading";
+
     status.appendChild(message);
 }
 
-function renderEmpty(status, list) {
+function renderEmpty(filters, status, list) {
+    filters.replaceChildren();
     list.replaceChildren();
     status.replaceChildren();
 
     const message = document.createElement("p");
+
     message.classList.add("projects-status__message");
     message.textContent = "No projects to display.";
 
@@ -54,15 +60,77 @@ function renderEmpty(status, list) {
     status.appendChild(message);
 }
 
-function renderSuccess(status, list, projects) {
+function renderSuccess(filters, status, list, projects) {
     status.replaceChildren();
     status.className = "projects-status";
 
+    renderProjectFilters(filters, list, projects);
+    renderProjectCards(list, projects);
+}
+
+function renderProjectCards(list, projects) {
     const cards = projects.map((project) => {
         return createProjectCard(project);
     });
 
     list.replaceChildren(...cards);
+}
+
+function renderProjectFilters(filters, list, projects) {
+    filters.replaceChildren();
+    
+    const languages = projects
+        .map((project) => project.language)
+        .filter((language) => language !== null)
+        .filter((language, index, array) => array.indexOf(language) === index)
+        .sort();
+
+    const allButton = createFilterButton("All", true);
+    allButton.addEventListener("click", () => {
+        setActiveFilter(filters, allButton);
+        renderProjectCards(list, projects);
+    });
+
+    filters.appendChild(allButton);
+
+    languages.forEach((language) => {
+        const button = createFilterButton(language);
+
+        button.addEventListener("click", () => {
+            const filteredProjects = 
+                projects.filter((project) => {
+                    return project.language === language;
+                });
+
+            setActiveFilter(filters, button);
+            renderProjectCards(list, filteredProjects);
+        });
+
+        filters.appendChild(button);
+    });
+}
+
+function createFilterButton(label, isActive=false) {
+    const button = document.createElement("button");
+
+    button.type = "button";
+    button.classList.add("project-filter");
+
+    if (isActive) {
+        button.classList.add("active");
+    }
+
+    button.textContent = label;
+    return button;
+}
+
+function setActiveFilter(filters, activeButton) {
+    const buttons = filters.querySelectorAll(".project-filter");
+
+    buttons.forEach((button) => {
+        button.classList.remove("active");
+    });
+    activeButton.classList.add("active");
 }
 
 function createProjectCard(project) {
@@ -80,7 +148,7 @@ function createProjectCard(project) {
     article.classList.add("project-card");
 
     const title = document.createElement("h3");
-    title.classList.add("project_card__title");
+    title.classList.add("project-card__title");
     title.textContent = name;
 
     const summary = document.createElement("p");
@@ -111,7 +179,8 @@ function createProjectCard(project) {
     return article;
 }
 
-function renderError(status, list, username) {
+function renderError(filters, status, list, username) {
+    filters.replaceChildren();
     list.replaceChildren();
     status.replaceChildren();
 

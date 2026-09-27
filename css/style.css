@@ -564,6 +564,43 @@ img {
     cursor: pointer;
 }
 
+#project-filters {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-bottom: 20px;
+}
+
+.project-filter {
+    min-height: 34px;
+    
+    padding: 0 12px;
+    
+    font-size: 13px;
+
+    color: var(--color-text);
+    background-color: transparent;
+
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+
+    cursor: pointer;
+
+    transition: 
+        color 0.2s ease,
+        background-color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.project-filter.active {
+    color: var(--color-background);
+    background-color: var(--color-text);
+
+    border-color: var(--color-text);
+}
+
 #contact {
     padding:
         var(--section-spacing)

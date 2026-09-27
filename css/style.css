@@ -322,6 +322,7 @@ img {
     object-fit: cover;
 
     border-radius: 50%;
+    background-color: transparent;
 }
 
 #about-intro {
@@ -768,4 +769,14 @@ body,
 .reveal.visible {
     opacity: 1;
     transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal {
+        opacity: 1;
+
+        transform: none;
+
+        transition: none;
+    }
 }

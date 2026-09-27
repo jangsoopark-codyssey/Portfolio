@@ -114,6 +114,7 @@ function initTheme() {
 
 function applyTheme(theme) {
     const themeButton = document.querySelector("#theme-button");
+    const profileImage = document.querySelector("#about-profile-image");
 
     document.documentElement.dataset.theme = theme;
 
@@ -123,6 +124,10 @@ function applyTheme(theme) {
         "aria-pressed",
         isDark
     );
+
+    profileImage.src = isDark
+        ? "./assets/images/profile-dark.png"
+        : "./assets/images/profile.png"
 }
 
 function initScrollAnimation() {

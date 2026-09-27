@@ -17,7 +17,7 @@
     --font-size-footer: 12px;
 
     /* Colors - default theme */
-    --color-backtround: #ffffff;
+    --color-background: #ffffff;
     --color-surface: #f7f7f7;
 
     --color-text: #111111;
@@ -36,4 +36,12 @@
     /* Components */
     --button-height: 44px;
     --top-button-size: 44px;
+}
+
+[data-theme="dark"] {
+    --color-background: #111111;
+    --color-surface: #1a1a1a;
+    --color-text: #f5f5f5;
+    --color-muted: #b5b5b5;
+    --color-border: #333333;
 }

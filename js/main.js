@@ -83,6 +83,48 @@ function initHeaderScroll() {
     });
 }
 
+function initTheme() {
+    const themeButton = document.querySelector("#theme-button");
+
+    const savedTheme = localStorage.getItem("theme");
+
+    const initialTheme = 
+        savedTheme === "dark"
+            ? "dark"
+            : "light";
+
+    applyTheme(initialTheme);
+
+    themeButton.addEventListener("click", () => {
+        const currentTheme = document.documentElement.dataset.theme;
+
+        const nextTheme = 
+            currentTheme === "dark"
+                ? "light"
+                : "dark";
+
+        applyTheme(nextTheme);
+
+        localStorage.setItem(
+            "theme",
+            nextTheme
+        );
+    });
+}
+
+function applyTheme(theme) {
+    const themeButton = document.querySelector("#theme-button");
+
+    document.documentElement.dataset.theme = theme;
+
+    const isDark = theme === "dark";
+
+    themeButton.setAttribute(
+        "aria-pressed",
+        isDark
+    );
+}
+
 async function main() {
     try {
         const content = await loadContent();
@@ -98,8 +140,8 @@ async function main() {
         initNavigation();
         initContactForm(content.contact.endpoint);
         initTopButton();
-
         initHeaderScroll();
+        initTheme();
 
         await loadProjects(
             content.projects.username

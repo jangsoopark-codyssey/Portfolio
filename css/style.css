@@ -63,11 +63,18 @@ img {
     z-index: 300;
 }
 
-#heaser.scrolled {
+#header.scrolled {
     background-color: var(--color-background);
 
     box-shadow: 
         0 2px 8px rgb(0 0 0 / 0.08);
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+
+    gap: 4px;
 }
 
 #logo {
@@ -76,6 +83,7 @@ img {
     line-height: 1;
 }
 
+#theme-button,
 #menu-button {
     display: flex;
     align-items: center;
@@ -93,6 +101,87 @@ img {
 
     cursor: pointer;
 }
+
+#theme-button {
+    width: 60px;
+    height: 34px;
+}
+
+.theme-switch__track {
+    position: relative;
+
+    width: 52px;
+    height: 26px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 7px;
+
+    background-color: #cfcfcf;
+
+    border-radius: 999px;
+
+    transition: background-color 0.2s ease;
+}
+
+.theme-switch__icon {
+    position: relative;
+
+    z-index: 2;
+
+    font-size: 13px;
+    line-height: 1;
+
+    pointer-events: none;
+}
+
+.theme-switch__icon--light {
+    color: #8a6500;
+}
+
+.theme-switch__icon--dark {
+    color: #555555;
+}
+
+.theme-switch__thumb {
+    position: absolute;
+
+    top: 3px;
+    left: 3px;
+
+    width: 20px;
+    height: 20px;
+
+    background-color: #ffffff;
+
+    border-radius: 50%;
+
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.25);
+
+    transition: 
+        transform 0.2s ease;
+
+    z-index: 1;
+}
+
+#theme-button[aria-pressed="true"] .theme-switch__track {
+    background-color: #444444;
+}
+
+#theme-button[aria-pressed="true"] .theme-switch__icon--light {
+    color: #dddddd;
+}
+
+#theme-button[aria-pressed="true"] .theme-switch__icon--dark {
+    color: #ffffff;
+}
+
+#theme-button[aria-pressed="true"] .theme-switch__thumb {
+    transform: translateX(26px);
+}
+
 
 #navigation {
     display: none;
@@ -198,7 +287,7 @@ img {
 }
 
 #hero-cta a:first-child {
-    color: #ffffff;
+    color: var(--color-background);
     background-color: var(--color-text);
     border: 1px solid var(--color-text);
 }
@@ -557,6 +646,14 @@ img {
     cursor: not-allowed;
 }
 
+#contact-submit,
+.projects-status__retry {
+    color: var(--color-background);
+    background-color: var(--color-text);
+
+    border: 1px solid var(--color-text);
+}
+
 .form-field__error {
     margin: 4px 0 0;
 
@@ -642,4 +739,18 @@ img {
 
 #top-button[hidden] {
     display: none;
+}
+
+body,
+#header,
+#navigation,
+#top-button,
+.skill-card,
+.project-card,
+.form-field input,
+.form-field textarea {
+    transition:
+        color 0.2s ease,
+        background-color 0.2s ease,
+        border-color 0.2s ease;
 }

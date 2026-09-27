@@ -17,6 +17,7 @@ import {
     initContactForm
 } from "./contact.js"
 
+
 function initNavigation() {
     const menuButton = document.querySelector("#menu-button")
     const navigation = document.querySelector("#navigation")
@@ -87,11 +88,16 @@ function initTheme() {
     const themeButton = document.querySelector("#theme-button");
 
     const savedTheme = localStorage.getItem("theme");
+    const mediaQuery = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+    );
 
     const initialTheme = 
-        savedTheme === "dark"
-            ? "dark"
-            : "light";
+        savedTheme !== null
+            ? savedTheme
+            : mediaQuery.matches
+                ? "dark"
+                : "light";
 
     applyTheme(initialTheme);
 
@@ -108,6 +114,20 @@ function initTheme() {
         localStorage.setItem(
             "theme",
             nextTheme
+        );
+    });
+
+    mediaQuery.addEventListener("change", (event) => {
+        const savedTheme = localStorage.getItem("theme");
+
+        if (savedTheme !== null) {
+            return;
+        }
+
+        applyTheme(
+            event.matches
+                ? "dark"
+                : "light"
         );
     });
 }

@@ -23,37 +23,39 @@
 <body>
 
   <header id="header">
-    <a id="logo" href="#hero"></a>
+    <div class="header-inner">
+      <a id="logo" href="#hero"></a>
 
-    <div class="header-actions">
-      <button
-        id="theme-button"
-        type="button"
-        aria-label="Toggle dark mode"
-        aria-pressed="false"
-      >
-        <span class="theme-switch__track">
-          <span class="theme-switch__icon theme-switch__icon--light">☀</span>
-          <span class="theme-switch__icon theme-switch__icon--dark">☾</span>
+      <div class="header-actions">
+        <button
+          id="theme-button"
+          type="button"
+          aria-label="Toggle dark mode"
+          aria-pressed="false"
+        >
+          <span class="theme-switch__track">
+            <span class="theme-switch__icon theme-switch__icon--light">☀</span>
+            <span class="theme-switch__icon theme-switch__icon--dark">☾</span>
 
-          <span class="theme-switch__thumb"></span>
-        </span>
-      </button>
+            <span class="theme-switch__thumb"></span>
+          </span>
+        </button>
 
-      <button
-        id="menu-button"
-        type="button" 
-        aria-label="Open navigation"
-        aria-expanded="false"
-        aria-controls="navigation"
-      >
-        ☰
-      </button>
+        <button
+          id="menu-button"
+          type="button" 
+          aria-label="Open navigation"
+          aria-expanded="false"
+          aria-controls="navigation"
+        >
+          ☰
+        </button>
+      </div>
+
+      <nav id="navigation">
+        <ul id="navigation-list"></ul>
+      </nav>
     </div>
-
-    <nav id="navigation">
-      <ul id="navigation-list"></ul>
-    </nav>
   </header>
 
   <main>

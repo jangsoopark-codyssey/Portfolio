@@ -1074,6 +1074,10 @@ body,
 
 /* Desktop */
 
+#desktop-toc {
+    display: none;
+}
+
 @media (min-width: 1024px) {
     .header-inner {
         max-width: var(--content-max-width);
@@ -1167,5 +1171,101 @@ body,
         padding:
             40px
             64px;
+    }
+
+    #desktop-toc {
+        display: block;
+
+        position: fixed;
+        top: 50%;
+        right: 18px;
+
+        transform: translateY(-50%);
+
+        z-index: 250;
+    }
+
+    #desktop-toc-nav {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+
+        gap: 10px;
+    }
+
+    #desktop-toc-nav a {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+
+        gap: 10px;
+
+        color: var(--color-muted);
+    }
+
+    .desktop-toc__dot {
+        width: 6px;
+        height: 6px;
+
+        flex-shrink: 0;
+
+        background-color: var(--color-border);
+
+        border-radius: 50%;
+
+        transition: 
+            width 0.2s ease,
+            height 0.2s ease,
+            background-color 0.2s ease;
+    }
+
+    .desktop-toc__label {
+        padding: 4px 8px;
+
+        font-size: 12px;
+
+        opacity: 0;
+        visibility: hidden;
+
+        transform: translateX(8px);
+
+        background-color: var(--color-background);
+
+        border: 1px solid var(--color-border);
+        border-radius: 6px;
+
+        white-space: nowrap;
+
+        transition: 
+            opacity 0.2s ease,
+            transform 0.2s ease,
+            visibility 0.2s;
+    }
+
+    #desktop-toc:hover .desktop-toc__label,
+    #desktop-toc:focus-within .desktop-toc__label {
+        opacity: 1;
+        visibility: visible;
+
+        transform: translateX(0);
+    }
+
+    #desktop-toc-nav a:hover .desktop-toc__dot {
+        width: 8px;
+        height: 8px;
+
+        background-color: var(--color-text);
+    }
+
+    #desktop-toc-nav a.active .desktop-toc__dot {
+        width: 8px;
+        height: 8px;
+
+        background-color: var(--color-text);
+    }
+
+    #desktop-toc-nav a.active .desktop-toc__label {
+        color: var(--color-text);
+        font-weight: 700;
     }
 }

@@ -216,6 +216,48 @@ function initScrollAnimation() {
     });
 }
 
+function initDesktopToc() {
+    const sections = document.querySelectorAll(
+        "#hero, #about, #skills, #projects, #contact"
+    );
+
+    const links = document.querySelectorAll(
+        "#desktop-toc-nav a"
+    );
+
+    const updateActiveSection = () => {
+        const referenceY = window.innerHeight * 0.35;
+
+        let activeSection = sections[0];
+
+        sections.forEach((section) => {
+            const rect = section.getBoundingClientRect();
+
+            if (rect.top <= referenceY && rect.bottom > referenceY) {
+                activeSection = section;
+            }
+        });
+
+        links.forEach((link) => {
+            const isActive = link.dataset.section === activeSection.id;
+
+            link.classList.toggle("active", isActive);
+        });
+    };
+
+    window.addEventListener(
+        "scroll",
+        updateActiveSection
+    )
+
+    window.addEventListener(
+        "resize",
+        updateActiveSection
+    )
+
+    updateActiveSection();
+}
+
 async function main() {
     try {
         const content = await loadContent();
@@ -235,6 +277,7 @@ async function main() {
         initHeaderScroll();
         initTheme();
         initScrollAnimation();
+        initDesktopToc();
 
         await loadProjects(
             content.projects.username

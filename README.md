@@ -6,6 +6,10 @@
 목표는 **Browser가 Web Page를 구성하고 동작시키는 과정**을 이해하는
 것이다.
 
+[[website](https://jangsoopark-codyssey.github.io/Portfolio)]
+
+[[slides](https://docs.google.com/presentation/d/1Hz_QTa4k2uS0o8MpVDwHpU7pXDRBNhYl/edit?usp=sharing&ouid=113518658259117049630&rtpof=true&sd=true)] 
+
 > **Top-Down Approach**\
 > Web Browser → HTML / CSS / JavaScript → Web APIs → Event / State →
 > Rendering → Portfolio
@@ -116,6 +120,7 @@ https://jangsoopark-codyssey.github.io/Portfolio/
 Repository:
 
 https://github.com/jangsoopark-codyssey/Portfolio
+
 
 ## 1.3 Project Structure
 

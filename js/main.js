@@ -11,11 +11,16 @@ import {
 
 import {
     loadProjects
-} from "./github.js"
+} from "./github.js";
 
 import {
     initContactForm
-} from "./contact.js"
+} from "./contact.js";
+
+import {
+    STATE
+} from "./state.js";
+
 
 function initHeroTyping() {
     const heroText = document.querySelector("#hero-main-text");
@@ -50,40 +55,53 @@ function initHeroTyping() {
 }
 
 function initNavigation() {
-    const menuButton = document.querySelector("#menu-button")
-    const navigation = document.querySelector("#navigation")
+    const menuButton = document.querySelector("#menu-button");
+    const navigation = document.querySelector("#navigation");
+
+    const renderNavigation = () => {
+        navigation.classList.toggle(
+            "active",
+            STATE.menuOpen
+        );
+
+        menuButton.setAttribute(
+            "aria-expanded",
+            String(STATE.menuOpen)
+        );
+    };
 
     menuButton.addEventListener("click", () => {
-        navigation.classList.toggle('active');
+        STATE.menuOpen = !STATE.menuOpen;
 
-        const isOpen = navigation.classList.contains("active");
-
-        menuButton.setAttribute("aria-expanded", isOpen);
+        renderNavigation();
     });
 
     const links = navigation.querySelectorAll("a");
 
     links.forEach((link) => {
         link.addEventListener("click", () => {
-            navigation.classList.remove("active");
-            menuButton.setAttribute("aria-expanded", "false");
+            STATE.menuOpen = false;
+
+            renderNavigation();
         });
     });
 
     document.addEventListener("click", (event) => {
-        const isOpen = navigation.classList.contains("active");
-
-        if (!isOpen)
+        if (!STATE.menuOpen) {
             return;
+        }
 
         const clickedMenuButton = menuButton.contains(event.target);
         const clickedNavigation = navigation.contains(event.target);
 
         if (!clickedMenuButton && !clickedNavigation) {
-            navigation.classList.remove("active");
-            menuButton.setAttribute("aria-expanded", "false");
+            STATE.menuOpen = false;
+
+            renderNavigation();
         }
     });
+
+    renderNavigation();
 }
 
 function initTopButton() {
@@ -117,35 +135,32 @@ function initHeaderScroll() {
 
 function initTheme() {
     const themeButton = document.querySelector("#theme-button");
-
     const savedTheme = localStorage.getItem("theme");
     const mediaQuery = window.matchMedia(
         "(prefers-color-scheme: dark)"
     );
 
-    const initialTheme = 
+    STATE.theme = 
         savedTheme !== null
             ? savedTheme
             : mediaQuery.matches
                 ? "dark"
                 : "light";
 
-    applyTheme(initialTheme);
+    applyTheme();
 
     themeButton.addEventListener("click", () => {
-        const currentTheme = document.documentElement.dataset.theme;
-
-        const nextTheme = 
-            currentTheme === "dark"
+        STATE.theme = 
+            STATE.theme === "dark"
                 ? "light"
                 : "dark";
 
-        applyTheme(nextTheme);
-
         localStorage.setItem(
             "theme",
-            nextTheme
+            STATE.theme
         );
+
+        applyTheme();
     });
 
     mediaQuery.addEventListener("change", (event) => {
@@ -155,30 +170,28 @@ function initTheme() {
             return;
         }
 
-        applyTheme(
-            event.matches
-                ? "dark"
-                : "light"
-        );
+        STATE.theme = event.matches ? "dark" : "light";
+
+        applyTheme();
     });
 }
 
-function applyTheme(theme) {
+function applyTheme() {
     const themeButton = document.querySelector("#theme-button");
     const profileImage = document.querySelector("#about-profile-image");
 
-    document.documentElement.dataset.theme = theme;
+    document.documentElement.dataset.theme = STATE.theme;
 
-    const isDark = theme === "dark";
+    const isDark = STATE.theme === "dark";
 
     themeButton.setAttribute(
         "aria-pressed",
-        isDark
+        String(isDark)
     );
 
     profileImage.src = isDark
         ? "./assets/images/profile-dark.png"
-        : "./assets/images/profile.png"
+        : "./assets/images/profile.png";
 }
 
 function initScrollAnimation() {
@@ -225,24 +238,35 @@ function initDesktopToc() {
         "#desktop-toc-nav a"
     );
 
+    const renderActiveSection = () => {
+        links.forEach((link) => {
+            const isActive = 
+                link.dataset.section === STATE.activeSection;
+
+            link.classList.toggle("active", isActive);
+        });
+    };
+
     const updateActiveSection = () => {
         const referenceY = window.innerHeight * 0.35;
 
-        let activeSection = sections[0];
+        let nextSection = STATE.activeSection;
 
         sections.forEach((section) => {
             const rect = section.getBoundingClientRect();
 
             if (rect.top <= referenceY && rect.bottom > referenceY) {
-                activeSection = section;
+                nextSection = section.id;
             }
         });
 
-        links.forEach((link) => {
-            const isActive = link.dataset.section === activeSection.id;
-
-            link.classList.toggle("active", isActive);
-        });
+        if (nextSection === STATE.activeSection) {
+            return;
+        }
+        
+        STATE.activeSection = nextSection;
+        
+        renderActiveSection();
     };
 
     window.addEventListener(
@@ -256,6 +280,7 @@ function initDesktopToc() {
     )
 
     updateActiveSection();
+    renderActiveSection();
 }
 
 async function main() {

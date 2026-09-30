@@ -1,3 +1,7 @@
+import {
+    STATE
+} from "./state.js";
+
 
 export async function loadProjects(username) {
     const filters = document.querySelector("#project-filters");
@@ -17,8 +21,8 @@ export async function loadProjects(username) {
 
         const projects = await response.json();
 
-        if (projects.length == 0) {
-            renderEmpty(status, list);
+        if (projects.length === 0) {
+            renderEmpty(filters, status, list);
             return;
         }
 
@@ -85,8 +89,11 @@ function renderProjectFilters(filters, list, projects) {
         .filter((language, index, array) => array.indexOf(language) === index)
         .sort();
 
-    const allButton = createFilterButton("All", true);
+    const allButton = createFilterButton("All", STATE.activeProjectFilter === "All");
+
     allButton.addEventListener("click", () => {
+        STATE.activeProjectFilter = "All";
+
         setActiveFilter(filters, allButton);
         renderProjectCards(list, projects);
     });
@@ -94,12 +101,14 @@ function renderProjectFilters(filters, list, projects) {
     filters.appendChild(allButton);
 
     languages.forEach((language) => {
-        const button = createFilterButton(language);
+        const button = createFilterButton(language, STATE.activeProjectFilter === language);
 
         button.addEventListener("click", () => {
+            STATE.activeProjectFilter = language;
+
             const filteredProjects = 
                 projects.filter((project) => {
-                    return project.language === language;
+                    return project.language === STATE.activeProjectFilter;
                 });
 
             setActiveFilter(filters, button);

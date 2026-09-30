@@ -129,7 +129,6 @@ Portfolio/
 ├─ scripts/
 │  └─ run.sh
 └─ README.md
-
 ```
 
 |  파일                  | 역할                                           |
@@ -144,18 +143,15 @@ Portfolio/
 |  `data/content.json`   | Portfolio Content와 설정                       |
 |  `scripts/run.sh`      | Local HTTP Server 실행                         |
 
-
 Content는 HTML에 직접 모두 작성하지 않고 `content.json`으로 분리하였다.
 
-
 ## 1.4 Run
+
 `content.json`을 `fetch()`로 읽기 때문에 Local HTTP Server에서 실행한다.
 
 ```bash
 cd scripts
-
 ./run.sh
-
 ```
 
 Local 환경에서는 Python의 `http.server`를 사용한다.
@@ -259,7 +255,6 @@ JavaScript
        ├─ Fetch API
        ├─ Web Storage API
        └─ Intersection Observer
-
 ```
 
 예를 들어 다음 기능은 ECMAScript 자체가 아니라 Browser가 제공하는 기능이다.
@@ -692,7 +687,6 @@ DevTools에서는 ES Module을 직접 import하여 현재 State를 확인할 수
 const { STATE } = await import("./js/state.js");
 console.table(STATE);
 ```
-
 
 
 # 7. Web APIs

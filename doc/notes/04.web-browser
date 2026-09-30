@@ -1,0 +1,1465 @@
+# 웹 브라우저의 기본 구조와 동작
+
+## 1. 웹 브라우저란 무엇인가?
+
+웹 브라우저(Web Browser)는 사용자가 Web Resource에 접근하고 이를 화면에 표현하며 상호작용할 수 있도록 제공되는 응용 소프트웨어이다.
+
+브라우저의 역할은 단순히 HTML을 화면에 출력하는 것에 한정되지 않는다.
+
+브라우저는 다음과 같은 기능을 수행한다.
+
+```text id="qlsvdk"
+Web Browser
+│
+├── User Interface
+│   ├── Address Bar
+│   ├── Back / Forward
+│   ├── Refresh
+│   ├── Tab
+│   └── Bookmark
+│
+├── Navigation
+│   ├── URL 해석
+│   ├── History 관리
+│   └── Page 이동
+│
+├── Networking
+│   ├── DNS
+│   ├── HTTP / HTTPS
+│   ├── Request / Response
+│   └── Resource Download
+│
+├── Document Processing
+│   ├── HTML Parsing
+│   ├── DOM
+│   ├── CSS Parsing
+│   └── Style Calculation
+│
+├── Rendering
+│   ├── Layout
+│   ├── Paint
+│   └── Compositing
+│
+├── JavaScript Execution
+│   ├── JavaScript Engine
+│   ├── Call Stack
+│   └── Heap
+│
+├── Event / Scheduling
+│   ├── User Event
+│   ├── Task
+│   ├── Microtask
+│   └── Event Loop
+│
+├── Storage
+│   ├── Cookie
+│   ├── Local Storage
+│   ├── Session Storage
+│   ├── IndexedDB
+│   └── Cache
+│
+├── Security
+│   ├── HTTPS / TLS
+│   ├── Same-Origin Policy
+│   ├── Sandbox
+│   ├── Permission
+│   └── Process Isolation
+│
+└── System Integration
+    ├── Operating System
+    ├── File System
+    ├── Network Stack
+    ├── GPU
+    └── Hardware
+```
+
+따라서 브라우저는 **사용자 인터페이스, Network Client, Document Processor, Rendering System, Programming Runtime, Storage System, Security Platform**이 결합된 복합적인 소프트웨어로 볼 수 있다.
+
+---
+
+# 2. 웹 브라우저의 전체 구조
+
+브라우저를 학습 목적으로 계층화하면 다음과 같이 구성할 수 있다.
+
+```text id="86onzk"
+┌─────────────────────────────────────────────────────┐
+│                  User Interface                     │
+│                                                     │
+│  Tab  Back  Forward  Refresh  Address Bar  Menu     │
+├─────────────────────────────────────────────────────┤
+│                                                     │
+│               Browser / Navigation                  │
+│                                                     │
+│  URL · History · Navigation · Permission · Download │
+│                                                     │
+├───────────────┬───────────────────┬─────────────────┤
+│               │                   │                 │
+│  Networking   │ Rendering Engine  │    Storage      │
+│               │                   │                 │
+│ DNS           │ HTML Parser       │ Cookie          │
+│ HTTP/HTTPS    │ DOM               │ Local Storage   │
+│ Cache         │ CSS               │ Session Storage │
+│ Resource      │ Layout            │ IndexedDB       │
+│ Download      │ Paint             │ Cache           │
+│               │ Compositing       │                 │
+├───────────────┴─────────┬─────────┴─────────────────┤
+│                         │                           │
+│                JavaScript Runtime                   │
+│                         │                           │
+│              JavaScript Engine                     │
+│              Web APIs                              │
+│              Event Loop                            │
+│              Task / Microtask                      │
+│                                                     │
+├─────────────────────────────────────────────────────┤
+│               Security / Isolation                  │
+│                                                     │
+│  Origin · Sandbox · Permission · Process Isolation  │
+├─────────────────────────────────────────────────────┤
+│              Operating System / Hardware            │
+│                                                     │
+│       Network · File System · Memory · GPU           │
+└─────────────────────────────────────────────────────┘
+```
+
+실제 Chrome, Safari, Firefox 등의 내부 구현은 이보다 복잡하며 구성 요소의 경계도 서로 다르다.
+
+위 구조는 Browser Architecture를 학습하기 위한 개념적 분류이다.
+
+---
+
+# 3. User Interface
+
+Browser에서 사용자가 직접 접하는 영역이다.
+
+대표적인 구성 요소는 다음과 같다.
+
+```text id="7vs10d"
+User Interface
+│
+├── Tab Bar
+├── Address Bar
+├── Back Button
+├── Forward Button
+├── Refresh / Stop
+├── Bookmark
+├── Download UI
+├── Settings
+├── Permission UI
+└── Developer Tools
+```
+
+예를 들어 사용자가 Address Bar에 다음 URL을 입력할 수 있다.
+
+```text id="y1ufb4"
+https://example.com/projects
+```
+
+그리고 Enter를 입력하면 Browser Navigation이 시작된다.
+
+따라서 Address Bar는 단순한 Text Input이 아니라 Browser의 Navigation System과 연결된 UI이다.
+
+---
+
+# 4. Browser Engine과 Navigation
+
+브라우저는 사용자의 명령과 내부 시스템 사이의 전체적인 동작을 조정해야 한다.
+
+개념적으로 다음과 같은 역할을 수행한다.
+
+```text id="4ak2b1"
+User Interface
+      │
+      ▼
+Browser / Navigation
+      │
+      ├── URL 처리
+      ├── 현재 Page 관리
+      ├── History 관리
+      ├── Tab 관리
+      ├── Navigation 제어
+      ├── Permission
+      └── Download
+```
+
+예를 들어 사용자가 URL을 입력하면 다음과 같은 작업들이 시작된다.
+
+```text id="1sptvk"
+URL 입력
+   │
+   ▼
+Navigation 시작
+   │
+   ├── URL 해석
+   ├── Security 확인
+   ├── Network 요청
+   ├── Response 처리
+   ├── Document 생성
+   └── Rendering 시작
+```
+
+---
+
+# 5. URL과 Navigation
+
+다음 URL을 예로 들 수 있다.
+
+```text id="xtfgyn"
+https://example.com/projects?id=10
+```
+
+개념적으로 다음 요소로 구성된다.
+
+```text id="l6hmg5"
+https://example.com/projects?id=10
+└─┬─┘   └────┬────┘└───┬───┘└─┬─┘
+scheme       host       path    query
+```
+
+Browser는 URL을 해석하여 어떤 Protocol을 사용하고 어느 Server의 어떤 Resource를 요청할지 판단한다.
+
+---
+
+# 6. Networking
+
+Navigation이 결정되면 Browser는 필요한 Resource를 가져와야 한다.
+
+Networking 영역에서는 대표적으로 다음 작업이 수행된다.
+
+```text id="fm7km4"
+Networking
+│
+├── DNS Resolution
+├── Connection
+├── TLS
+├── HTTP / HTTPS
+├── Request
+├── Response
+├── Redirect
+├── Cache
+└── Resource Download
+```
+
+전체 과정을 단순화하면 다음과 같다.
+
+```text id="kjnl7a"
+Browser
+   │
+   │ URL
+   ▼
+DNS
+   │
+   │ IP Address
+   ▼
+Connection
+   │
+   ▼
+HTTPS라면 TLS
+   │
+   ▼
+HTTP Request
+   │
+   ▼
+Server
+   │
+   ▼
+HTTP Response
+   │
+   ▼
+Browser
+```
+
+---
+
+# 7. 하나의 웹 페이지에는 여러 Resource가 필요하다
+
+Browser가 HTML 하나만 다운로드하면 Page Loading이 끝나는 것은 아니다.
+
+HTML 내부에는 다른 Resource가 포함될 수 있다.
+
+```html id="1hdvki"
+<link rel="stylesheet" href="./css/style.css">
+
+<img src="./assets/profile.jpg">
+
+<script src="./js/main.js"></script>
+```
+
+따라서 Browser는 HTML을 Parsing하면서 추가 Resource를 발견한다.
+
+```text id="6rqfga"
+HTML
+ │
+ ├── style.css ──────────► Request
+ │
+ ├── profile.jpg ────────► Request
+ │
+ ├── main.js ────────────► Request
+ │
+ └── font.woff2 ─────────► Request
+```
+
+하나의 Page Loading은 일반적으로 여러 Network Request의 집합이다.
+
+---
+
+# 8. HTML Parser와 DOM
+
+HTML Resource가 전달되면 Browser는 HTML을 Parsing한다.
+
+```text id="9z3jrn"
+HTML Source
+     │
+     ▼
+HTML Parser
+     │
+     ▼
+DOM
+```
+
+다음 HTML을 예로 들 수 있다.
+
+```html id="t4w15x"
+<body>
+    <main>
+        <button>Menu</button>
+    </main>
+</body>
+```
+
+DOM은 개념적으로 다음과 같이 구성된다.
+
+```text id="3tt8iv"
+Document
+└── html
+    └── body
+        └── main
+            └── button
+                └── "Menu"
+```
+
+DOM은 HTML Source 자체가 아니라 Browser Memory에 존재하는 문서의 Object Model이다.
+
+---
+
+# 9. CSS 처리
+
+CSS Resource 역시 Browser가 Parsing한다.
+
+```text id="y2bjlc"
+CSS Source
+    │
+    ▼
+CSS Parser
+    │
+    ▼
+CSS Rules / CSSOM
+```
+
+DOM Element와 CSS 규칙을 바탕으로 Browser는 최종 Style을 계산한다.
+
+```text id="25fbt4"
+DOM
+ │
+ ├──────────────┐
+ │              │
+CSS Rules       │
+ │              │
+ └───────┬──────┘
+         ▼
+ Style Calculation
+         │
+         ▼
+ Computed Style
+```
+
+이 과정에는 다음 규칙들이 관여한다.
+
+- Cascade
+- Specificity
+- Inheritance
+- Source Order
+- Media Query
+
+---
+
+# 10. Rendering Engine
+
+Rendering Engine은 Document와 Style 정보를 실제 화면 표현으로 변환한다.
+
+전체 과정은 다음과 같이 단순화할 수 있다.
+
+```text id="7s1htf"
+DOM + Style
+     │
+     ▼
+Style Calculation
+     │
+     ▼
+Layout
+     │
+     ▼
+Paint
+     │
+     ▼
+Compositing
+     │
+     ▼
+Screen
+```
+
+---
+
+# 11. Layout
+
+Layout 단계에서는 Element의 위치와 크기를 계산한다.
+
+```text id="2aqevr"
+Element A
+x      = 0
+y      = 0
+width  = 1440
+height = 60
+
+Element B
+x      = 100
+y      = 200
+width  = 300
+height = 100
+```
+
+다음과 같은 CSS 속성들이 Layout에 영향을 줄 수 있다.
+
+```text id="i63ns6"
+width
+height
+margin
+padding
+display
+position
+flex
+grid
+```
+
+---
+
+# 12. Paint
+
+Paint 단계에서는 Element가 어떻게 그려질지를 처리한다.
+
+대표적으로 다음과 같은 요소가 포함된다.
+
+```text id="3wbjq5"
+Paint
+│
+├── Background
+├── Text
+├── Border
+├── Image
+├── Shadow
+└── 기타 시각적 요소
+```
+
+---
+
+# 13. Compositing
+
+현대 Browser는 Page의 일부를 여러 Layer로 관리할 수 있다.
+
+```text id="pvvs7a"
+Layer A ──┐
+Layer B ──┼──► Compositor ──► Final Frame
+Layer C ──┘
+```
+
+Compositor는 Layer들을 적절한 위치와 순서로 합성하여 최종 Frame을 구성한다.
+
+GPU가 이러한 처리의 일부에 활용될 수 있다.
+
+---
+
+# 14. JavaScript Engine
+
+JavaScript Engine은 JavaScript 코드를 실행한다.
+
+대표적인 JavaScript Engine으로 다음과 같은 것들이 존재한다.
+
+```text id="2g4r0m"
+Chrome / Chromium
+└── V8
+
+Firefox
+└── SpiderMonkey
+
+Safari
+└── JavaScriptCore
+```
+
+JavaScript Engine의 주요 역할을 단순화하면 다음과 같다.
+
+```text id="7vtgzl"
+JavaScript Engine
+│
+├── JavaScript Parsing
+├── Code Execution
+├── Call Stack
+├── Heap
+├── Object 관리
+└── Garbage Collection
+```
+
+---
+
+# 15. JavaScript Engine과 Browser는 동일하지 않다
+
+JavaScript Engine은 Browser의 구성 요소 중 하나이다.
+
+```text id="1ox93a"
+Browser
+│
+├── User Interface
+├── Navigation
+├── Networking
+├── Rendering
+├── Storage
+├── Security
+│
+└── JavaScript Engine
+```
+
+따라서 JavaScript Engine이 HTTP, DOM Rendering, Browser Tab 등을 모두 직접 관리하는 것은 아니다.
+
+---
+
+# 16. Web API
+
+Browser는 JavaScript가 Browser의 기능을 사용할 수 있도록 여러 Programming Interface를 제공한다.
+
+이를 일반적으로 Web API라고 한다.
+
+```text id="5d2usq"
+JavaScript
+    │
+    │ Web API
+    ▼
+Browser 기능
+│
+├── DOM
+├── Event
+├── Fetch
+├── Timer
+├── Storage
+├── History
+├── Location
+├── Clipboard
+└── 기타 기능
+```
+
+예를 들어 다음은 JavaScript 언어 자체의 Network 문법이 아니다.
+
+```javascript id="cm14mj"
+fetch("/data.json");
+```
+
+`fetch()`는 Browser 등의 Host Environment가 제공하는 Fetch API이다.
+
+---
+
+# 17. JavaScript Language와 Web API
+
+다음과 같이 구분할 수 있다.
+
+| 기능 | 영역 |
+|---|---|
+| `const`, `let` | JavaScript |
+| `function` | JavaScript |
+| `Array` | JavaScript |
+| `Promise` | JavaScript |
+| `async`, `await` | JavaScript |
+| `document` | Web API |
+| `querySelector()` | DOM API |
+| `addEventListener()` | DOM/Event API |
+| `fetch()` | Fetch API |
+| `setTimeout()` | Timer 기능 |
+| `localStorage` | Web Storage API |
+| `history` | History API |
+
+따라서 JavaScript와 Browser API는 분리하여 이해할 필요가 있다.
+
+---
+
+# 18. Event System
+
+Browser는 사용자와 Web Page 사이의 상호작용을 Event로 처리한다.
+
+대표적인 Event는 다음과 같다.
+
+```text id="6xj2qw"
+User Interaction
+│
+├── click
+├── input
+├── change
+├── submit
+├── keydown
+├── keyup
+├── pointermove
+├── scroll
+└── touch
+```
+
+Mouse Click을 예로 들면 다음과 같은 흐름으로 이해할 수 있다.
+
+```text id="kq0a11"
+Mouse
+  │
+  ▼
+Operating System
+  │
+  ▼
+Browser Input System
+  │
+  ▼
+DOM Event
+  │
+  ▼
+Event Dispatch
+  │
+  ▼
+JavaScript Event Handler
+```
+
+---
+
+# 19. Event-Driven Programming
+
+Frontend JavaScript는 Event-Driven Programming의 대표적인 사례이다.
+
+```text id="c8cz4f"
+Initialization
+     │
+     ├── click Handler 등록
+     ├── submit Handler 등록
+     └── scroll Handler 등록
+              │
+              ▼
+          Event 발생
+              │
+              ▼
+       해당 Handler 실행
+              │
+              ▼
+       Application Logic
+```
+
+Program이 지속적으로 모든 입력 상태를 직접 검사하는 것이 아니라, Event 발생에 따라 필요한 Logic을 실행한다.
+
+---
+
+# 20. Event Loop
+
+JavaScript는 일반적인 Browser Main Thread에서 한 번에 하나의 JavaScript 작업을 실행한다.
+
+그러나 Browser에서는 동시에 여러 종류의 작업이 진행될 수 있다.
+
+```text id="i4fh3e"
+Browser
+│
+├── JavaScript
+├── Network
+├── Timer
+├── Input
+├── Rendering
+└── Storage / I/O
+```
+
+이러한 환경에서 JavaScript 실행 순서를 조정하는 핵심 메커니즘이 Event Loop이다.
+
+```text id="k2tkm6"
+                 Call Stack
+                     │
+                현재 JS 실행
+                     │
+                     ▼
+                작업 완료
+                     │
+                     ▼
+              Microtask 처리
+                     │
+                     ▼
+              Rendering 기회
+                     │
+                     ▼
+                다음 Task
+```
+
+---
+
+# 21. Task와 Microtask
+
+JavaScript의 비동기 Scheduling에서는 Task와 Microtask의 구분이 중요하다.
+
+```text id="wpwrkj"
+Task
+│
+├── Event Callback
+├── Timer Callback
+└── 기타 Task
+
+
+Microtask
+│
+├── Promise.then()
+├── Promise.catch()
+├── Promise.finally()
+└── await 이후 실행
+```
+
+현재 Task가 완료되면 Microtask Queue의 작업들이 처리되고, Browser는 필요한 Rendering 기회를 가진 뒤 다음 Task를 처리할 수 있다.
+
+---
+
+# 22. Promise
+
+Promise는 미래에 완료될 비동기 작업의 결과를 표현하는 JavaScript 객체이다.
+
+```text id="kzoybu"
+                Promise
+                   │
+                pending
+                   │
+          ┌────────┴────────┐
+          ▼                 ▼
+      fulfilled          rejected
+         성공               실패
+```
+
+Promise 자체가 Network Thread 또는 Worker 역할을 수행하는 것은 아니다.
+
+실제 작업은 Browser 또는 Operating System의 관련 Subsystem이 수행할 수 있으며, Promise는 JavaScript에서 그 미래 결과를 표현한다.
+
+---
+
+# 23. `async`와 `await`
+
+`async`와 `await`는 Promise 기반 비동기 코드를 다루기 위한 JavaScript 문법이다.
+
+```javascript id="74s3nv"
+async function loadData() {
+    const response = await fetch("/data.json");
+    const data = await response.json();
+
+    return data;
+}
+```
+
+`await`는 CPU를 점유하면서 완료 여부를 반복 확인하지 않는다.
+
+```text id="k58d2n"
+JavaScript
+    │
+    │ fetch()
+    ▼
+Browser Network
+    │
+    │ Network 작업 진행
+    │
+JavaScript
+    │
+    │ await
+    │
+    └── 현재 async 함수의 이후 실행 보류
+              │
+              ▼
+       다른 작업 실행 가능
+```
+
+Network 작업이 완료되면 Promise의 상태가 결정되고 후속 JavaScript 작업이 Scheduling된다.
+
+---
+
+# 24. Storage
+
+Browser는 웹 애플리케이션이 데이터를 저장할 수 있도록 여러 Storage 기능을 제공한다.
+
+대표적인 기능은 다음과 같다.
+
+```text id="v28dy1"
+Browser Storage
+│
+├── Cookie
+├── Local Storage
+├── Session Storage
+├── IndexedDB
+└── Cache
+```
+
+각 Storage는 목적과 특성이 다르다.
+
+---
+
+# 25. Cookie
+
+Cookie는 Browser가 저장하고 HTTP Request와 연계하여 사용할 수 있는 작은 데이터이다.
+
+```text id="md72hj"
+Server
+  │
+  │ Set-Cookie
+  ▼
+Browser
+  │
+  │ Cookie 저장
+  │
+  │ 이후 조건에 맞는 Request
+  ▼
+Cookie Header
+  │
+  ▼
+Server
+```
+
+Cookie는 다음과 같은 용도로 사용될 수 있다.
+
+- Session 관리
+- 인증 상태 관리
+- 사용자 설정
+- 기타 Server와 연계된 상태 관리
+
+Cookie에는 Domain, Path, Expiration, Secure, HttpOnly, SameSite 등의 속성이 존재한다.
+
+---
+
+# 26. Local Storage
+
+Local Storage는 Origin 단위로 Key-Value 형태의 데이터를 Browser에 저장할 수 있는 Web Storage이다.
+
+```javascript id="u8suj5"
+localStorage.setItem("theme", "dark");
+
+const theme = localStorage.getItem("theme");
+```
+
+개념적으로 다음과 같다.
+
+```text id="ilv3ur"
+Origin
+https://example.com
+       │
+       ▼
+Local Storage
+│
+├── theme = dark
+└── language = en
+```
+
+Browser를 종료한 후에도 일반적으로 데이터가 유지될 수 있다.
+
+---
+
+# 27. Session Storage
+
+Session Storage 역시 Key-Value Storage이지만 일반적으로 특정 Page Session과 연관된다.
+
+```javascript id="2z6v5g"
+sessionStorage.setItem("step", "2");
+```
+
+Local Storage와 목적이 다르므로 데이터의 생명주기를 고려하여 선택해야 한다.
+
+---
+
+# 28. IndexedDB
+
+IndexedDB는 Browser에서 보다 많은 구조화된 데이터를 저장하기 위한 Database API이다.
+
+```text id="uq2s2a"
+Web Application
+      │
+      ▼
+IndexedDB
+│
+├── Object Store
+├── Key
+├── Index
+└── Structured Data
+```
+
+단순한 문자열 Key-Value 저장을 넘어 보다 복잡한 Client-side Data Storage가 필요한 경우 사용할 수 있다.
+
+---
+
+# 29. Browser Cache
+
+Cache는 이미 가져온 Resource를 재사용하여 Network 비용과 Loading 시간을 줄이기 위한 중요한 Browser 기능이다.
+
+```text id="4xwbpd"
+Resource 요청
+     │
+     ▼
+Cache 확인
+     │
+ ┌───┴────┐
+ │        │
+Hit      Miss
+ │        │
+ ▼        ▼
+재사용   Network Request
+```
+
+HTML, CSS, JavaScript, Image, Font 등의 Resource가 HTTP Cache 정책에 따라 저장되고 재사용될 수 있다.
+
+---
+
+# 30. Storage와 Cache는 동일하지 않다
+
+Storage와 Cache는 모두 데이터를 저장하지만 목적이 다르다.
+
+```text id="xf50g6"
+Storage
+│
+└── Application이 사용할 데이터를 저장
+
+
+Cache
+│
+└── 이미 획득한 Resource나 결과를
+    재사용하여 성능 향상
+```
+
+예를 들어 사용자 Theme는 Local Storage에 저장할 수 있으며, 이미 다운로드한 CSS 파일은 HTTP Cache에 저장될 수 있다.
+
+---
+
+# 31. Security
+
+Browser는 외부에서 전달받은 Code와 Resource를 실행하기 때문에 Security가 핵심적인 구성 요소이다.
+
+대표적인 Browser Security 개념은 다음과 같다.
+
+```text id="28nhzw"
+Browser Security
+│
+├── HTTPS / TLS
+├── Origin
+├── Same-Origin Policy
+├── CORS
+├── CSP
+├── Sandbox
+├── Permission
+├── Cookie Security
+└── Process Isolation
+```
+
+---
+
+# 32. Origin
+
+Origin은 일반적으로 다음 세 요소의 조합으로 정의된다.
+
+```text id="ih8y6b"
+Origin
+
+Scheme + Host + Port
+```
+
+예를 들어 다음과 같다.
+
+```text id="o45dmr"
+https://example.com:443
+```
+
+Browser는 Origin을 기준으로 Resource와 Storage 등의 접근을 제한하는 여러 Security Policy를 적용한다.
+
+---
+
+# 33. Same-Origin Policy
+
+웹 페이지의 JavaScript가 임의의 다른 Origin의 데이터에 자유롭게 접근할 수 있다면 심각한 Security 문제가 발생할 수 있다.
+
+따라서 Browser는 Same-Origin Policy를 통하여 Origin 간 접근을 제한한다.
+
+```text id="3dqw8s"
+Page A
+https://site-a.com
+       │
+       │ 제한
+       ▼
+https://site-b.com
+```
+
+CORS는 Server가 특정 Cross-Origin 접근을 허용할 수 있도록 하는 HTTP 기반 메커니즘이다.
+
+---
+
+# 34. Browser Permission
+
+웹 페이지가 특정 Device 또는 민감한 기능에 접근하려는 경우 Browser가 사용자 Permission을 요구할 수 있다.
+
+대표적으로 다음 기능들이 있다.
+
+```text id="v5d7h5"
+Web Application
+      │
+      ▼
+Browser Permission
+│
+├── Camera
+├── Microphone
+├── Location
+├── Notification
+└── 기타 Device 기능
+```
+
+Browser는 Web Application과 Operating System Resource 사이에서 Security Boundary 역할을 수행한다.
+
+---
+
+# 35. Process와 Isolation
+
+현대 Browser는 안정성과 Security를 위하여 여러 Process를 사용하는 Multi-Process Architecture를 채택할 수 있다.
+
+Chromium 계열 Browser를 매우 단순화하면 다음과 같이 볼 수 있다.
+
+```text id="4ok5fh"
+Browser
+│
+├── Browser Process
+│
+├── Renderer Process
+│   ├── HTML / CSS
+│   ├── DOM
+│   ├── JavaScript
+│   └── Rendering 관련 처리
+│
+├── Network 관련 Process
+│
+├── GPU Process
+│
+└── 기타 Utility Process
+```
+
+각 Tab이 반드시 정확히 하나의 Process와 일대일 대응하는 것은 아니다.
+
+Site Isolation, iframe, Browser 정책 등에 따라 실제 Process 구조는 달라질 수 있다.
+
+---
+
+# 36. Operating System과 Browser
+
+Browser는 모든 기능을 독자적으로 구현하지 않는다.
+
+Operating System의 기능을 이용한다.
+
+```text id="qz69uk"
+Web Browser
+     │
+     ▼
+Operating System
+│
+├── Network Stack
+├── File System
+├── Memory Management
+├── Process / Thread
+├── Window System
+├── Input Device
+└── GPU Driver
+     │
+     ▼
+Hardware
+```
+
+따라서 Browser는 Web Application과 Operating System 사이의 중요한 추상화 계층으로 볼 수 있다.
+
+---
+
+# 37. GPU와 Browser
+
+현대 Browser는 Rendering 성능을 높이기 위하여 GPU를 활용할 수 있다.
+
+개념적으로 다음과 같은 관계를 가진다.
+
+```text id="adqoh1"
+DOM / CSS
+    │
+    ▼
+Layout / Paint
+    │
+    ▼
+Layer
+    │
+    ▼
+Compositor
+    │
+    ▼
+GPU 관련 처리
+    │
+    ▼
+Display
+```
+
+모든 Rendering 작업이 GPU에서 수행된다는 의미는 아니다.
+
+Rendering Pipeline의 특정 작업에서 GPU Acceleration이 활용될 수 있다.
+
+---
+
+# 38. URL 입력부터 화면 출력까지
+
+Browser의 주요 구성 요소를 하나의 실제 동작으로 연결하면 이해하기 쉽다.
+
+사용자가 Address Bar에 URL을 입력하고 Enter를 누른다고 가정한다.
+
+```text id="g0ykqt"
+① User Interface
+
+Address Bar
+    │
+    │ URL 입력 + Enter
+    ▼
+
+
+② Navigation
+
+URL 해석
+History / Navigation 처리
+Security 관련 판단
+    │
+    ▼
+
+
+③ Networking
+
+DNS
+    │
+Connection
+    │
+TLS
+    │
+HTTP Request
+    │
+Server
+    │
+HTTP Response
+    ▼
+
+
+④ Document Processing
+
+HTML
+    │
+    ▼
+HTML Parser
+    │
+    ▼
+DOM
+    │
+    ├── CSS 발견 ──────► 추가 Request
+    ├── JS 발견 ───────► 추가 Request
+    ├── Image 발견 ────► 추가 Request
+    └── Font 발견 ─────► 추가 Request
+
+
+⑤ Style
+
+CSS Parsing
+    │
+    ▼
+CSS Rules
+    │
+DOM + CSS
+    │
+    ▼
+Style Calculation
+
+
+⑥ Layout
+
+Element의 크기와 위치 계산
+    │
+    ▼
+
+
+⑦ Paint
+
+시각적 Drawing 정보 생성
+    │
+    ▼
+
+
+⑧ Compositing
+
+Layer 합성
+    │
+    ▼
+
+
+⑨ Screen
+
+사용자에게 Page 표시
+```
+
+---
+
+# 39. 화면 출력 이후 Browser는 종료되지 않는다
+
+초기 Rendering이 완료된 후에도 Browser는 지속적으로 동작한다.
+
+```text id="yutyp7"
+Page 표시
+   │
+   ├── Mouse Event
+   ├── Keyboard Event
+   ├── Scroll Event
+   ├── Timer
+   ├── Network Response
+   ├── Animation
+   ├── JavaScript
+   └── Storage 접근
+          │
+          ▼
+    Page 상태 변경
+          │
+          ▼
+필요한 경우 Rendering 갱신
+```
+
+따라서 웹 페이지는 단순한 정적 문서가 아니라 Browser 안에서 지속적으로 Event와 State 변화가 발생할 수 있는 실행 환경이다.
+
+---
+
+# 40. Event가 발생한 이후
+
+사용자가 Button을 클릭하는 경우를 예로 들 수 있다.
+
+```text id="4qg8jg"
+Mouse
+  │
+  ▼
+Operating System
+  │
+  ▼
+Browser Input System
+  │
+  ▼
+어떤 DOM Element가 대상인지 판단
+  │
+  ▼
+DOM Event
+  │
+  ▼
+Event Dispatch
+  │
+  ▼
+등록된 Listener
+  │
+  ▼
+Scheduling
+  │
+  ▼
+JavaScript Event Handler
+  │
+  ▼
+Application Logic
+  │
+  ▼
+DOM / State 변경
+  │
+  ▼
+필요한 Rendering
+```
+
+이 구조를 통하여 Event-Driven Programming을 이해할 수 있다.
+
+---
+
+# 41. 비동기 작업이 발생한 이후
+
+`fetch()`를 예로 들 수 있다.
+
+```text id="edwqlu"
+JavaScript
+    │
+    │ fetch()
+    ▼
+Fetch API
+    │
+    ▼
+Browser Network System
+    │
+    ├──────────────► Server
+    │
+    │
+    │◄────────────── Response
+    │
+    ▼
+Promise 상태 결정
+    │
+    ▼
+Microtask Scheduling
+    │
+    ▼
+Event Loop
+    │
+    ▼
+JavaScript 후속 실행
+```
+
+JavaScript가 Network Response를 기다리면서 Main Thread를 점유하는 것이 아니다.
+
+Browser와 Operating System이 실제 Network 작업을 관리한다.
+
+---
+
+# 42. 웹 브라우저의 전체 구조
+
+현재까지의 내용을 통합하면 다음과 같이 정리할 수 있다.
+
+```text id="w7jfv4"
+┌──────────────────────── WEB BROWSER ────────────────────────┐
+│                                                            │
+│                     USER INTERFACE                         │
+│                                                            │
+│  Tabs │ Address Bar │ Back │ Forward │ Refresh │ Settings  │
+│                                                            │
+├────────────────────────────────────────────────────────────┤
+│                                                            │
+│                BROWSER / NAVIGATION                        │
+│                                                            │
+│ URL │ History │ Navigation │ Permission │ Download         │
+│                                                            │
+├───────────────────┬───────────────────┬────────────────────┤
+│                   │                   │                    │
+│    NETWORKING     │     STORAGE       │     SECURITY       │
+│                   │                   │                    │
+│ DNS               │ Cookie            │ Origin             │
+│ HTTP / HTTPS      │ Local Storage     │ SOP                │
+│ TLS               │ Session Storage   │ CORS               │
+│ Cache             │ IndexedDB         │ CSP                │
+│ Resource Loading  │ Cache             │ Sandbox            │
+│                   │                   │ Isolation          │
+│                   │                   │                    │
+├───────────────────┴───────────────────┴────────────────────┤
+│                                                            │
+│                    RENDERING ENGINE                        │
+│                                                            │
+│ HTML Parser ──► DOM                                        │
+│ CSS Parser  ──► CSS Rules                                  │
+│                 │                                          │
+│                 ▼                                          │
+│        Style → Layout → Paint → Compositing                │
+│                                                            │
+├────────────────────────────────────────────────────────────┤
+│                                                            │
+│                 JAVASCRIPT ENVIRONMENT                     │
+│                                                            │
+│ JavaScript Engine                                          │
+│ ├── Call Stack                                             │
+│ ├── Heap                                                   │
+│ └── JavaScript Execution                                   │
+│                                                            │
+│ Web APIs                                                   │
+│ ├── DOM / Event                                            │
+│ ├── Fetch                                                  │
+│ ├── Timer                                                  │
+│ └── Storage                                                │
+│                                                            │
+│ Scheduling                                                 │
+│ ├── Task                                                   │
+│ ├── Microtask                                              │
+│ └── Event Loop                                             │
+│                                                            │
+├────────────────────────────────────────────────────────────┤
+│                                                            │
+│               OPERATING SYSTEM / HARDWARE                  │
+│                                                            │
+│ Network │ File System │ Memory │ Input │ GPU │ Display      │
+│                                                            │
+└────────────────────────────────────────────────────────────┘
+```
+
+---
+
+# 43. 전체 동작의 핵심
+
+웹 브라우저의 동작을 가장 큰 흐름으로 정리하면 다음과 같다.
+
+```text id="yn5qqt"
+사용자
+  │
+  ▼
+User Interface
+  │
+  ▼
+Navigation
+  │
+  ▼
+Networking
+  │
+  ▼
+Resource 획득
+  │
+  ├── HTML
+  ├── CSS
+  ├── JavaScript
+  ├── Image
+  └── Font
+  │
+  ▼
+Parsing
+  │
+  ├── DOM
+  └── Style Rules
+  │
+  ▼
+Rendering
+  │
+  ▼
+Screen
+  │
+  ▼
+사용자 Interaction
+  │
+  ▼
+Event
+  │
+  ▼
+JavaScript
+  │
+  ├── Application Logic
+  ├── Web API
+  ├── Network
+  └── Storage
+  │
+  ▼
+State / DOM 변경
+  │
+  ▼
+Rendering 갱신
+```
+
+---
+
+# 44. 웹 브라우저 학습의 핵심 분류
+
+웹 브라우저를 이해하기 위해서는 다음 영역을 구분하여 학습하는 것이 적절하다.
+
+| 영역 | 핵심 질문 |
+|---|---|
+| **User Interface** | 사용자의 명령이 Browser에 어떻게 입력되는가? |
+| **Navigation** | URL 입력 이후 어떤 Page로 이동할지 어떻게 결정하는가? |
+| **Networking** | Web Resource를 어떻게 가져오는가? |
+| **HTML / DOM** | HTML 문서를 Browser가 어떻게 구조화하는가? |
+| **CSS / Style** | Style을 어떻게 해석하고 결정하는가? |
+| **Rendering** | DOM과 Style이 어떻게 Pixel로 변환되는가? |
+| **JavaScript Engine** | JavaScript 코드는 어디에서 어떻게 실행되는가? |
+| **Web API** | JavaScript는 Browser 기능을 어떻게 사용하는가? |
+| **Event System** | 사용자 입력이 어떻게 JavaScript Handler까지 전달되는가? |
+| **Event Loop** | 여러 작업의 실행 순서는 어떻게 Scheduling되는가? |
+| **Asynchronous Processing** | Network 등의 작업을 어떻게 Blocking 없이 처리하는가? |
+| **Storage** | 웹 애플리케이션의 데이터는 어디에 저장되는가? |
+| **Security** | Web Application의 접근 권한은 어떻게 제한되는가? |
+| **Process / Thread** | Browser의 여러 작업은 실제 실행 환경에서 어떻게 분리되는가? |
+| **OS / Hardware** | Browser는 Operating System과 Hardware를 어떻게 이용하는가? |
+
+이 구조를 먼저 **웹 브라우저 자체의 전체 지도**로 사용하고, 이후 DOM, CSSOM, Event, Event Loop, Promise, `async/await` 등의 질문은 각 영역을 세부적으로 확장하는 방식으로 학습할 수 있다.
